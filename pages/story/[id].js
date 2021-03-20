@@ -1,10 +1,12 @@
 import React from 'react';
 import { useRouter } from 'next/router'
 import { Heading, Text, Container, Center, Link } from '@chakra-ui/react';
+const Path = require('../../lib/models/Path')
 
 export default function Story(props) {
   const { query: { id } } = useRouter()
   console.log(id)
+  console.log(props)
 
   if ( !isNaN(id) ) {
     return (
@@ -32,7 +34,11 @@ export default function Story(props) {
  * This ONLY runs the first time the page is loaded on the server!
  */
 export async function getServerSideProps(context) {
+  const paths = JSON.parse(JSON.stringify(await Path.find({})))
+  console.log(paths)
   return {
-    props: {}
+    props: {
+      paths
+    }
   }
 }
