@@ -1,15 +1,15 @@
 const Path = require('../../../lib/models/Path')
+import { getSession } from 'next-auth/client'
 
 export default async function (req, res) {
-  if (req.method === 'GET') { // Convert back to POST
-    // Get the parameters from the request
-    // Include the other params later
-    const { query: { tldr } } = req
+  const session = await getSession({ req })
 
-    // Create the Path in the DB
-    const p = new Path({ tldr, owner: '6056235b1c8b7b01c375eb9a', body: { hello: 'world' }, nsfw: false, parent: null })
+  if (req.method === 'POST') {
+    const { body: { body, parentId } } = req
+    const p = new Path({ body, tldr: 'test tldr', owner: session.userId, parent: parentId })
     await p.save()
     return res.status(201).json(p) 
   } 
+  
   return res.status(404)
 }

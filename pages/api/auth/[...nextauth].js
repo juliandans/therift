@@ -10,5 +10,11 @@ export default NextAuth({
     })
   ],
   database: process.env.DATABASE_URL,
-  site: process.env.NEXTAUTH_URL
+  site: process.env.NEXTAUTH_URL,
+  callbacks: {
+    session: async (session, user) => {
+      session.userId = user.id;    
+      return Promise.resolve(session);
+    }
+  }
 })

@@ -1,0 +1,5 @@
+start with "npm run dev"
+login with gr8jld@gmail.com
+
+CHECKLIST
+---------

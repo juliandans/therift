@@ -1,11 +1,12 @@
 import React, {useState, useEffect} from 'react';
-import { Heading, Text, Container, Center, Link, Textarea } from '@chakra-ui/react';
+import { Heading, Text, Container, Center, Link, Textarea, Button } from '@chakra-ui/react';
 import { useQuill } from "react-quilljs";
+import { useRouter } from "next/router"
 // import { Redirect } from "react-router-dom" 
 import 'quill/dist/quill.snow.css';
+import { createPath } from '../../lib/client/api';
 
-export default function Write(props) {
-  const theme = 'snow'; 
+const theme = 'snow'; 
   const modules = {
     toolbar: [
       ['bold', 'italic', 'underline', 'strike'],
@@ -25,7 +26,10 @@ export default function Write(props) {
   'size',
   'link', 'image', 'video',
   'clean',];
- 
+
+
+export default function Write(props) {
+  const { push } = useRouter()
   const { quill, quillRef } = useQuill({ theme, modules, formats });
  
   const [ text, changetext ] = useState("");
@@ -38,6 +42,15 @@ export default function Write(props) {
     }
   }, [quill]);
 
+  const submitStory = async () => {
+    // console.log("SUBMITTING STORY")
+    const { path } = await createPath({ body: quill.getContents() })
+    console.log("SUBMITTING STORY:"+path)
+    push(`/story/${path._id}`)
+
+    // Redirect them back to story
+  }
+
   return (
     <Container>
       <Center>
@@ -49,6 +62,7 @@ export default function Write(props) {
       <div className="ql-snow">
         <div className="ql-editor" style={{whiteSpace: 'pre-wrap'}} dangerouslySetInnerHTML={{__html: quill && text}} />
       </div>
+      <Button onClick={submitStory}>Save</Button>
     </Container>
   );
 }
