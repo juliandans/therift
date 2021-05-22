@@ -1,10 +1,10 @@
 import React, {useState, useEffect} from 'react';
-import { Heading, Text, Container, Center, Link, Textarea, Button } from '@chakra-ui/react';
+import { Heading, Text, Container, Center, Button, Input } from '@chakra-ui/react';
 import { useQuill } from "react-quilljs";
 import { useRouter } from "next/router"
-// import { Redirect } from "react-router-dom" 
 import 'quill/dist/quill.snow.css';
 import { createPath } from '../../lib/client/api';
+
 
 const theme = 'snow'; 
   const modules = {
@@ -20,7 +20,7 @@ const theme = 'snow';
     ],
   };
 
- 
+  const placeholder = "Body (ie. the actual story, ending with a choice of some sort)"
   const formats = [  'bold', 'italic', 'underline', 'strike',
   'align', 'list', 'indent',
   'size',
@@ -29,22 +29,17 @@ const theme = 'snow';
 
 
 export default function Write(props) {
-  const { push } = useRouter()
-  const { quill, quillRef } = useQuill({ theme, modules, formats });
+  const { push, query: {id} } = useRouter()
+
+  const { quill, quillRef } = useQuill({ theme, modules, formats, placeholder });
  
   const [ text, changetext ] = useState("");
+  const [ tldr, changetldr ] = useState("");
 
-  useEffect(()=>{
-    if (quill) {
-      quill.on('text-change', () => {
-        changetext(quill.root.innerHTML);
-      });
-    }
-  }, [quill]);
 
   const submitStory = async () => {
     // console.log("SUBMITTING STORY")
-    const { path } = await createPath({ body: quill.getContents() })
+    const { path } = await createPath({ body: quill.getContents(), parentId: id, tldr:tldr })
     console.log("SUBMITTING STORY:"+path)
     push(`/story/${path._id}`)
 
@@ -56,17 +51,26 @@ export default function Write(props) {
       <Center>
         <Heading as="h1">THE RIFT</Heading>
       </Center>
-      <Text as="p">Chapter: {props.old}</Text>
-      <Text as="p">New Chapter: {props.newch}</Text>
+      <Input 
+        borderRadius="0"
+        borderColor="white"
+        _focus={{
+          outline:0
+        }}
+        _hover={{
+
+        }}
+        placeholder="Action (ie. Run Away or Open The Door)"
+        onChange={i => changetldr(i)}
+      />
+
+      <Text as="p"></Text>
       <div ref={quillRef} />
       <div className="ql-snow">
         <div className="ql-editor" style={{whiteSpace: 'pre-wrap'}} dangerouslySetInnerHTML={{__html: quill && text}} />
       </div>
+      <Text as="p"></Text>
       <Button onClick={submitStory}>Save</Button>
     </Container>
   );
 }
-
-// xhttp.open("POST", "demo_post2.asp", true);
-// xhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
-// xhttp.send("fname=Henry&lname=Ford");
