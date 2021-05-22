@@ -2,6 +2,7 @@ import '../styles/globals.css'
 import { ColorModeSwitcher } from '../lib/ColorModeSwitcher';
 import { ChakraProvider, ColorModeScript } from '@chakra-ui/react';
 import { Provider } from 'next-auth/client'
+import 'quill/dist/quill.snow.css'
 
 function MyApp({ Component, pageProps }) {
   return (

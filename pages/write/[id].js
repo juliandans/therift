@@ -3,7 +3,7 @@ import { Heading, Text, Container, Center, Button, Input } from '@chakra-ui/reac
 import { useQuill } from "react-quilljs";
 import { useRouter } from "next/router";
 import { createPath } from '../../lib/client/api';
-import 'quill/dist/quill.snow.css'
+
 
 const theme = 'snow'; 
   const modules = {
