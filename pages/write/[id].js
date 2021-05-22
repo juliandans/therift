@@ -1,8 +1,7 @@
 import React, {useState, useEffect} from 'react';
 import { Heading, Text, Container, Center, Button, Input } from '@chakra-ui/react';
 import { useQuill } from "react-quilljs";
-import { useRouter } from "next/router"
-// import 'quill/dist/quill.snow.css';
+import { useRouter } from "next/router";
 import { createPath } from '../../lib/client/api';
 
 
